@@ -1,0 +1,7 @@
+{
+  "name": "MakingCoffee",
+  "version": "1.0.0",
+  "dependencies": {
+    "sync-input": "https://github.com/hyperskill/sync-input/archive/v1.tar.gz"
+  }
+}
