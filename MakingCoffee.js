@@ -8,6 +8,7 @@ let waterDispo = 400;
 let milkDispo = 540;
 let cupDispo = 9;
 let coffeeBeansDispo = 120;
+let actionFlag;
 // let waterPerCup = 200;
 // let milkPerCup = 50;
 // let coffeeBeansPerCup = 15;
@@ -25,7 +26,7 @@ Pouring some milk into the cup
 Coffee is ready!`);
 }*/
 
-function coffeeMachineHas() {
+function remaining() {
     console.log(`The coffee machine has:
 ${waterDispo} ml of water
 ${milkDispo} ml of milk
@@ -39,56 +40,106 @@ $${moneyDispo} of money
 function numberOfCoffee() {
     coffeeCup = input("Write how many cups of coffee you will need: ");
 }*/
+function main() {
+    do {
+        action();
+    } while (actionFlag !== "exit");
+}
 
 function action() {
-    let action = input("Write action (buy, fill, take): \n");
     console.log();
-    if (action === "buy") {
-        buy();
-    } else if (action === "fill") {
-        fill();
-    } else if (action === "take") {
-        takeMoney();
-    } else {
-        console.log("this option doesn't exist!!");
+    actionFlag = input("Write action (buy, fill, take, remaining, exit): \n");
+    console.log();
+    switch (actionFlag) {
+        case "buy":
+            buy();
+            break;
+        case "fill":
+            fill();
+            break;
+        case "take":
+            takeMoney();
+            break;
+        case "remaining":
+            remaining();
+            break;
+        case "exit":
+            return;
+        default:
+            console.log("this option doesn't exist!!");
+            break;
     }
 }
 
 function buy() {
-    let buy = Number(input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: \n"));
-    console.log();
-    if (buy === 1) {
+    let buy = (input("What do you want to buy? 1 - espresso, 2 - latte, " +
+        "3 - cappuccino, back - to main menu:  \n"));
+    if (Number(buy) === 1) {
         espresso();
-    } else if (buy === 2) {
+    } else if (Number(buy) === 2) {
         latte();
-    } else if (buy === 3) {
+    } else if (Number(buy) === 3) {
         cappuccino();
+    } else if (buy === "back") {
+        main();
     } else {
         console.log("this option doesn't exist!!");
     }
 }
 
 function espresso() {
-    waterDispo -= 250;
-    coffeeBeansDispo -= 16;
-    moneyDispo += 4;
-    cupDispo -= 1;
+    let supply = resource(250, 0, 16);
+    if (supply === 1) {
+        waterDispo -= 250;
+        coffeeBeansDispo -= 16;
+        moneyDispo += 4;
+        cupDispo -= 1;
+        console.log("I have enough resources, making you a coffee!");
+    } else {
+        console.log(`Sorry, not enough ${supply}!`);
+    }
 }
 
 function latte() {
-    waterDispo -= 350;
-    milkDispo -= 75;
-    coffeeBeansDispo -= 20;
-    moneyDispo += 7;
-    cupDispo -= 1;
+    let supply = resource(350, 75, 20);
+    if (supply === 1) {
+        waterDispo -= 350;
+        milkDispo -= 75;
+        coffeeBeansDispo -= 20;
+        moneyDispo += 7;
+        cupDispo -= 1;
+        console.log("I have enough resources, making you a coffee!");
+    } else {
+        console.log(`Sorry, not enough ${supply}!`);
+    }
 }
 
 function cappuccino() {
-    waterDispo -= 200;
-    milkDispo -= 100;
-    coffeeBeansDispo -= 12;
-    moneyDispo += 6;
-    cupDispo -= 1;
+    let supply = resource(200, 100, 12);
+    if (supply === 1) {
+
+        waterDispo -= 200;
+        milkDispo -= 100;
+        coffeeBeansDispo -= 12;
+        moneyDispo += 6;
+        cupDispo -= 1;
+        console.log("I have enough resources, making you a coffee!");
+    } else {
+        console.log(`Sorry, not enough ${supply}!`);
+    }
+}
+
+function resource(waterNeed, milkNeed, coffeeBeansNeed) {
+    if (waterNeed > waterDispo)
+        return "water";
+    if (milkNeed > milkDispo)
+        return "milk";
+    if (coffeeBeansNeed > coffeeBeansDispo)
+        return "coffee";
+    if (cupDispo === 0)
+        return "disposable cups";
+    else
+        return 1;
 }
 
 function fill() {
@@ -100,7 +151,6 @@ function fill() {
     coffeeBeansDispo += coffeeBeansAdd;
     let cupsAdd = Number(input("Write how many disposable cups you want to add: \n"));
     cupDispo += cupsAdd;
-    console.log();
 }
 
 function takeMoney() {
@@ -145,9 +195,9 @@ ${coffeeBeansNeed} g of coffee beans`);
 
 //greeting();
 //request();
-coffeeMachineHas();
-action();
-coffeeMachineHas();
+
+main();
+
 //numberOfCoffee();
 //ingredientNeeded(coffeeCup);
 //howMany(coffeeCup);
